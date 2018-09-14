@@ -5,7 +5,51 @@
 
 ## 使用
 
-代码在[lib](lib)目录下
+代码在[lib](lib)目录下。  
+
+```java
+ /**
+  * 将输入字符串转为拼音，以字符为单位插入分隔符，多个拼音只取其中一个
+  *
+  * 例: "hello:中国！"  在separator为","时，输出： "h,e,l,l,o,:,ZHONG,GUO,!"
+  *
+  * @param str        输入字符串
+  * @param separator  分隔符
+  * @param caseType   大小写类型
+  * @return           中文转为拼音的字符串
+  */
+ Pinyin.toPinyin(String str, String separator, int caseType):String
+ // caseType取值:
+ Pinyin.UP_CASE;        //全部大写
+ Pinyin.FIRST_UP_CASE;  //首字母大写
+ Pinyin.LOW_CASE;       //全部小写
+ 
+ /**
+  * 将输入字符转为拼音，多音字只取一个拼音
+  *
+  * @param c         输入字符
+  * @param caseType  大小写类型
+  * @return          拼音字符串数组
+  */
+ Pinyin.toPinyin(char c, int caseType):String[]
+ 
+ /**
+  * 判断输入字符是否为汉字
+  *
+  * @param c  输入字符
+  * @return   是汉字返回非负数，反之返回负数
+  */
+ Pinyin.isChinese(char c):int
+ 
+ /**
+  * 删除小写字母
+  *
+  * @param firstUpCase  首字母大写的拼音
+  * @return             拼音首字母
+  */
+ Pinyin.deleteLowerCase(String firstUpCase):String
+ 
+```
 
 ## 说明
 

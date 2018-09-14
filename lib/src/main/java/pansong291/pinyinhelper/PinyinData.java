@@ -3,7 +3,7 @@ package pansong291.pinyinhelper;
 /**
  * Created by pansong291 on 2018/9/12.
  */
-public final class PinyinData {
+final class PinyinData {
 
     static final char MIN_VALUE = 19968;
 
@@ -27,7 +27,7 @@ public final class PinyinData {
     private PinyinData() {}
 
  //dei,eng,hng,lo,lue,n,qui,r,tei, not find
- public static final String[] PINYIN_TABLE = new String[]{"", "A", "Ai", "An", "Ang", "Ao", "Ba", "Bai",
+ static final String[] PINYIN_TABLE = new String[]{"", "A", "Ai", "An", "Ang", "Ao", "Ba", "Bai",
   "Ban", "Bang", "Bao", "Bei", "Ben", "Beng", "Bi", "Bian", "Biao", "Bie", "Bin", "Bing",
   "Bo", "Bu", "Ca", "Cai", "Can", "Cang", "Cao", "Ce", "Cen", "Ceng", "Cha", "Chai",
   "Chan", "Chang", "Chao", "Che", "Chen", "Cheng", "Chi", "Chong", "Chou", "Chu", "Chuai",

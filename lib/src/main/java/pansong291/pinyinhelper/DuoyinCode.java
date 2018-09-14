@@ -3,7 +3,7 @@ package pansong291.pinyinhelper;
 /**
  * Created by pansong291 on 2018/9/12.
  */
-public final class DuoyinCode {
+final class DuoyinCode {
 
  private DuoyinCode() {}
 
