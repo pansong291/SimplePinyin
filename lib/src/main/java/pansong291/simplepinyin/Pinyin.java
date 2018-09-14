@@ -1,4 +1,4 @@
-package pansong291.pinyinhelper;
+package pansong291.simplepinyin;
 
 /**
  * Created by pansong291 on 2018/9/12.
@@ -9,7 +9,7 @@ public final class Pinyin
  public static final int UP_CASE = -1;      //全部大写
  public static final int FIRST_UP_CASE = 0; //首字母大写
  public static final int LOW_CASE = 1;      //全部小写
-
+ 
  private Pinyin(){}
 
  /**
@@ -75,7 +75,7 @@ public final class Pinyin
   {
    result = new String[]{String.valueOf(c).toUpperCase()};
   }
-
+  
   for(int i = 0;i < result.length;i++)
   {
    switch(caseType)
@@ -126,7 +126,7 @@ public final class Pinyin
   }
   return sb.toString();
  }
-
+ 
  private static int getPinyinCode(char c)
  {
   int offset = c - PinyinData.MIN_VALUE;
@@ -147,7 +147,7 @@ public final class Pinyin
   }
  }
 
- public static String[] getDuoyin(char c)
+ private static String[] getDuoyin(char c)
  {
   String duoyin[] = null;
   short duoyinCode[] = null;
@@ -222,5 +222,5 @@ public final class Pinyin
   }
   return realIndex;
  }
-
+ 
 }

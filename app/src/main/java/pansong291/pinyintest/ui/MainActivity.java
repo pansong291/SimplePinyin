@@ -13,10 +13,10 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import pansong291.pinyinhelper.Pinyin;
-import pansong291.pinyinhelper.PinyinData;
+import pansong291.simplepinyin.Pinyin;
+import pansong291.simplepinyin.PinyinData;
 import pansong291.pinyintest.R;
-import pansong291.pinyinhelper.DuoyinCode;
+import pansong291.simplepinyin.DuoyinCode;
 
 public class MainActivity extends Zactivity 
 {

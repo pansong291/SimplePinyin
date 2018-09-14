@@ -1,4 +1,4 @@
-package pansong291.pinyinhelper;
+package pansong291.simplepinyin;
 
 /**
  * Created by pansong291 on 2018/9/12.

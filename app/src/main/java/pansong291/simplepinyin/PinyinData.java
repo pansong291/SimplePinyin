@@ -1,13 +1,10 @@
-package pansong291.pinyinhelper;
+package pansong291.simplepinyin;
 
-/**
- * Created by pansong291 on 2018/9/12.
- */
-final class PinyinData {
+public final class PinyinData {
 
-    static final char MIN_VALUE = 19968;
+    public static final char MIN_VALUE = 19968;
 
-    static final char MAX_VALUE = 40869;
+    public static final char MAX_VALUE = 40869;
 
     static final String PINYIN_12295 = "Ling";
 
@@ -17,17 +14,19 @@ final class PinyinData {
 
     static final int PINYIN_CODE_2_OFFSET = 7000 * 2;
 
-    static final int[] BIT_MASKS = new int[]{0x1, 0x2, 0x4, 0x8, 0x10, 0x20, 0x40, 0x80};
+   public static final int[] BIT_MASKS = new int[]{0x1, 0x2, 0x4, 0x8, 0x10, 0x20, 0x40, 0x80};
 
     static final int TWO_BIT_MASKS[] = new int[]{0xc0, 0x30, 0x0c, 0x03};
    
     static final int PADDING_MASK = 256;
 
 
-    private PinyinData() {}
+    private PinyinData() {
+        //no instance
+    }
 
  //dei,eng,hng,lo,lue,n,qui,r,tei, not find
- static final String[] PINYIN_TABLE = new String[]{"", "A", "Ai", "An", "Ang", "Ao", "Ba", "Bai",
+ public static final String[] PINYIN_TABLE = new String[]{"", "A", "Ai", "An", "Ang", "Ao", "Ba", "Bai",
   "Ban", "Bang", "Bao", "Bei", "Ben", "Beng", "Bi", "Bian", "Biao", "Bie", "Bin", "Bing",
   "Bo", "Bu", "Ca", "Cai", "Can", "Cang", "Cao", "Ce", "Cen", "Ceng", "Cha", "Chai",
   "Chan", "Chang", "Chao", "Che", "Chen", "Cheng", "Chi", "Chong", "Chou", "Chu", "Chuai",
