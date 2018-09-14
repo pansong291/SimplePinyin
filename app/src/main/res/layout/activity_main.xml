@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:orientation="vertical"
+	android:gravity="center">
+
+	<ScrollView
+		android:layout_height="wrap_content"
+		android:layout_width="match_parent"
+		android:layout_marginLeft="24dp"
+		android:layout_marginRight="24dp">
+
+		<EditText
+			android:layout_height="wrap_content"
+			android:inputType="textMultiLine"
+			android:layout_width="match_parent"
+			android:id="@+id/edt"/>
+
+	</ScrollView>
+
+	<LinearLayout
+		android:layout_height="wrap_content"
+		android:layout_width="match_parent"
+		android:orientation="vertical"
+		android:gravity="center">
+
+		<LinearLayout
+			android:layout_height="wrap_content"
+			android:layout_width="wrap_content"
+			android:orientation="horizontal">
+
+			<Button
+				android:layout_height="wrap_content"
+				android:layout_width="wrap_content"
+				android:text="btn"
+				android:onClick="onClick"
+				android:id="@+id/btn"/>
+
+			<Button
+				android:layout_height="wrap_content"
+				android:layout_width="wrap_content"
+				android:text="btn2"
+				android:id="@+id/btn2"
+				android:onClick="onClick2"/>
+
+		</LinearLayout>
+
+		<LinearLayout
+			android:layout_height="wrap_content"
+			android:layout_width="wrap_content"
+			android:orientation="horizontal">
+
+			<Button
+				android:layout_height="wrap_content"
+				android:layout_width="wrap_content"
+				android:text="btn3"
+				android:id="@+id/btn3"
+				android:onClick="onClick3"/>
+
+			<Button
+				android:layout_height="wrap_content"
+				android:layout_width="wrap_content"
+				android:text="btn4"
+				android:id="@+id/btn4"
+				android:onClick="onClick4"/>
+
+		</LinearLayout>
+
+		<LinearLayout
+			android:layout_height="wrap_content"
+			android:layout_width="wrap_content"
+			android:orientation="horizontal">
+
+			<Button
+				android:layout_height="wrap_content"
+				android:layout_width="wrap_content"
+				android:text="btn5"
+				android:onClick="onClick5"
+				android:id="@+id/btn5"/>
+
+			<Button
+				android:layout_height="wrap_content"
+				android:layout_width="wrap_content"
+				android:text="btn6"
+				android:id="@+id/btn6"
+				android:onClick="onClick6"/>
+
+		</LinearLayout>
+
+	</LinearLayout>
+
+</LinearLayout>
+
