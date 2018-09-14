@@ -6,20 +6,21 @@ package pansong291.pinyinhelper;
 public final class Pinyin
 {
 
- public static final int UP_CASE = -1;
- public static final int FIRST_UP_CASE = 0;
- public static final int LOW_CASE = 1;
- 
+ public static final int UP_CASE = -1;      //全部大写
+ public static final int FIRST_UP_CASE = 0; //首字母大写
+ public static final int LOW_CASE = 1;      //全部小写
+
  private Pinyin(){}
 
  /**
-  * 将输入字符串转为拼音，以字符为单位插入分隔符
+  * 将输入字符串转为拼音，以字符为单位插入分隔符，多个拼音只取其中一个
   *
   * 例: "hello:中国！"  在separator为","时，输出： "h,e,l,l,o,:,ZHONG,GUO,!"
   *
-  * @param str  输入字符串
-  * @param separator 分隔符
-  * @return 中文转为拼音的字符串
+  * @param str        输入字符串
+  * @param separator  分隔符
+  * @param caseType   大小写类型
+  * @return           中文转为拼音的字符串
   */
  public static String toPinyin(String str, String separator, int caseType)
  {
@@ -43,9 +44,9 @@ public final class Pinyin
  /**
   * 将输入字符转为拼音
   *
-  * @param c 输入字符
-  * @param caseType 定义拼音大小写
-  * @return return pinyin if c is chinese in uppercase, String.valueOf(c) otherwise.
+  * @param c         输入字符
+  * @param caseType  大小写类型
+  * @return          拼音字符串数组
   */
  public static String[] toPinyin(char c, int caseType)
  {
@@ -58,17 +59,23 @@ public final class Pinyin
   }else if(charIndex > 0)
   {
    String duoyin[] = getDuoyin(c);
-   result = new String[duoyin.length + 1];
-   result[0] = PinyinData.PINYIN_TABLE[charIndex];
-   for(int i = 0;i < duoyin.length;i++)
+   if(duoyin == null)
    {
-    result[i + 1] = duoyin[i];
+    result = new String[]{PinyinData.PINYIN_TABLE[charIndex]};
+   }else
+   {
+    result = new String[duoyin.length + 1];
+    result[0] = PinyinData.PINYIN_TABLE[charIndex];
+    for(int i = 0;i < duoyin.length;i++)
+    {
+     result[i + 1] = duoyin[i];
+    }
    }
   }else
   {
    result = new String[]{String.valueOf(c).toUpperCase()};
   }
-  
+
   for(int i = 0;i < result.length;i++)
   {
    switch(caseType)
@@ -89,8 +96,8 @@ public final class Pinyin
  /**
   * 判断输入字符是否为汉字
   *
-  * @param c 输入字符
-  * @return 是汉字返回非负数，反之返回负数
+  * @param c  输入字符
+  * @return   是汉字返回非负数，反之返回负数
   */
  public static int isChinese(char c)
  {
@@ -105,8 +112,8 @@ public final class Pinyin
  /**
   * 删除小写字母
   *
-  * @param firstUpCase 首字母大写的拼音
-  * @return 拼音首字母
+  * @param firstUpCase  首字母大写的拼音
+  * @return             拼音首字母
   */
  public static String deleteLowerCase(String firstUpCase)
  {
@@ -119,8 +126,8 @@ public final class Pinyin
   }
   return sb.toString();
  }
- 
- public static int getPinyinCode(char c)
+
+ private static int getPinyinCode(char c)
  {
   int offset = c - PinyinData.MIN_VALUE;
   if (0 <= offset && offset < PinyinData.PINYIN_CODE_1_OFFSET)
@@ -161,7 +168,7 @@ public final class Pinyin
   return duoyin;
  }
 
- public static short decodeIndex(byte[] paddings, byte[] indexes, int offset)
+ private static short decodeIndex(byte[] paddings, byte[] indexes, int offset)
  {
   int index1 = offset / 8;
   int index2 = offset % 8;
@@ -215,5 +222,5 @@ public final class Pinyin
   }
   return realIndex;
  }
- 
+
 }

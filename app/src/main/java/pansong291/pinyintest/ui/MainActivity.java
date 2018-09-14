@@ -238,6 +238,21 @@ public class MainActivity extends Zactivity
  public void onClick5(View v)
  {
   btn5.setClickable(false);
+  String dy[];
+  for(char i=PinyinData.MIN_VALUE;i<PinyinData.MIN_VALUE+2000;i++)
+  {
+   dy=Pinyin.toPinyin(i,Pinyin.FIRST_UP_CASE);
+   if(dy==null)
+   {
+    continue;
+   }
+   edt.append(String.valueOf(i)+","+Integer.toHexString(i).toUpperCase());
+   for(int j=0;j<dy.length;j++)
+   {
+    edt.append(","+dy[j].toLowerCase());
+   }
+   edt.append(",\n");
+  }
  }
  
  public void onClick6(View v)

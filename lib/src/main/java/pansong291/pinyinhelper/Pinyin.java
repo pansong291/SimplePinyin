@@ -59,11 +59,17 @@ public final class Pinyin
   }else if(charIndex > 0)
   {
    String duoyin[] = getDuoyin(c);
-   result = new String[duoyin.length + 1];
-   result[0] = PinyinData.PINYIN_TABLE[charIndex];
-   for(int i = 0;i < duoyin.length;i++)
+   if(duoyin == null)
    {
-    result[i + 1] = duoyin[i];
+    result = new String[]{PinyinData.PINYIN_TABLE[charIndex]};
+   }else
+   {
+    result = new String[duoyin.length + 1];
+    result[0] = PinyinData.PINYIN_TABLE[charIndex];
+    for(int i = 0;i < duoyin.length;i++)
+    {
+     result[i + 1] = duoyin[i];
+    }
    }
   }else
   {
