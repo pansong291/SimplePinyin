@@ -6,7 +6,7 @@ public final class DuoyinCode {
   //no instance
  }
 
-public static short[] INDEX_WORD = new short[]{
+public static short[] INDEX_DUOYIN_CHARACTER = new short[]{
   1,7,13,20,44,54,60,66,72,80,87,88,92,121,126,128,134,153,159,161,
   178,192,199,207,212,225,247,282,284,288,293,295,302,303,314,316,317,320,323,339,
   345,346,347,353,372,380,389,407,417,421,423,447,458,478,479,481,489,502,508,510,

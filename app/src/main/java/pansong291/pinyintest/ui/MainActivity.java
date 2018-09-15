@@ -46,6 +46,7 @@ public class MainActivity extends Zactivity
  
  public void onClick(View v)
  {
+  //多音code转码
   btn.setClickable(false);
   try
   {
@@ -130,6 +131,7 @@ public class MainActivity extends Zactivity
  
  public void onClick2(View v)
  {
+  //多音code解码
   btn2.setClickable(false);
   int ind,len;
   short relInd;
@@ -141,7 +143,7 @@ public class MainActivity extends Zactivity
     len=DuoyinCode.INDEX_DUOYIN_CODE[i+1]-ind;
    else len=DuoyinCode.DUOYIN_CODE.length-ind;
       
-   word=(char)(DuoyinCode.INDEX_WORD[i]+19968);
+   word=(char)(DuoyinCode.INDEX_DUOYIN_CHARACTER[i]+19968);
    edt.append(String.valueOf(word)+","
     +Integer.toHexString(word).toUpperCase()+",");
    edt.append(Pinyin.toPinyin(word,Pinyin.LOW_CASE)+",");
@@ -168,6 +170,7 @@ public class MainActivity extends Zactivity
  
  public void onClick3(View v)
  {
+  //多音index转码
   btn3.setClickable(false);
   
   List<Byte>indexDuoyinCode1=new ArrayList<Byte>();
@@ -212,6 +215,7 @@ public class MainActivity extends Zactivity
  
  public void onClick4(View v)
  {
+  //多音index解码
   btn4.setClickable(false);
   int TWO_BIT_MASKS[]={0xc0,0x30,0x0c,0x03};
   int relInd;short m2Bit;
@@ -237,6 +241,7 @@ public class MainActivity extends Zactivity
 
  public void onClick5(View v)
  {
+  //任意字符转拼音
   btn5.setClickable(false);
   String dy[];
   char input[]=edt.getText().toString().toCharArray();
@@ -258,6 +263,7 @@ public class MainActivity extends Zactivity
  
  public void onClick6(View v)
  {
+  // 所有多音字转拼音(多音部分)
   btn6.setClickable(false);
   String dy[];
   for(char i=PinyinData.MIN_VALUE;i<PinyinData.MAX_VALUE;i++)
