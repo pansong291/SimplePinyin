@@ -11,7 +11,16 @@
  /**
   * 将输入字符串转为拼音，以字符为单位插入分隔符，多个拼音只取其中一个
   *
-  * 例: "hello:中国！"  在separator为","时，输出： "h,e,l,l,o,:,ZHONG,GUO,!"
+  * 例: "hello:中国！"  在separator为","时，输出： "H,E,L,L,O,:,Zhong,Guo,!"
+  *
+  * @param str        输入字符串
+  * @param separator  分隔符
+  * @return           中文转为拼音的字符串
+  */
+ Pinyin.toPinyin(String str, String separator):String
+ 
+ /**
+  * 将输入字符串转为拼音，以字符为单位插入分隔符，多个拼音只取其中一个
   *
   * @param str        输入字符串
   * @param separator  分隔符
@@ -19,10 +28,19 @@
   * @return           中文转为拼音的字符串
   */
  Pinyin.toPinyin(String str, String separator, int caseType):String
+ 
  // caseType取值:
- Pinyin.UP_CASE;        //全部大写
- Pinyin.FIRST_UP_CASE;  //首字母大写
- Pinyin.LOW_CASE;       //全部小写
+  Pinyin.UP_CASE;        //全部大写
+  Pinyin.FIRST_UP_CASE;  //首字母大写
+  Pinyin.LOW_CASE;       //全部小写
+ 
+ /**
+  * 将输入字符转为拼音，支持多音字
+  *
+  * @param c  输入字符
+  * @return   拼音字符串数组
+  */
+ Pinyin.toPinyin(char c):String[]
  
  /**
   * 将输入字符转为拼音，支持多音字
@@ -68,3 +86,5 @@
 1. 某些汉字的拼音并不被多数人所熟知，因此考虑加入多数人所熟知的拼音作为该字的多音来处理。  
    例如，汉字 `嗯` 的拼音是 `n` 和 `ng` ，但是一般拼音输入法是将 `en` 作为 `嗯` 的拼音，实际上 `嗯` 的拼音并不是 `en` ，但是如果输入法不这样做的话，将会有很大一部分人无法通过拼音输入得到 `嗯` 字。因此，考虑将 `en` 作为 `嗯` 的多音来处理。
    目前还未支持。
+2. 字库来源于TinyPinyin，估计最终来源应该是Pinyin4j，目前发现有部分字没有在字库里找到。
+   例如， `㘑` 字，其unicode为 `3611` 。

@@ -239,14 +239,15 @@ public class MainActivity extends Zactivity
  {
   btn5.setClickable(false);
   String dy[];
-  for(char i=PinyinData.MIN_VALUE;i<PinyinData.MIN_VALUE+2000;i++)
+  char input[]=edt.getText().toString().toCharArray();
+  for(char i=0;i<input.length;i++)
   {
-   dy=Pinyin.toPinyin(i,Pinyin.FIRST_UP_CASE);
+   dy=Pinyin.toPinyin(input[i]);
    if(dy==null)
    {
     continue;
    }
-   edt.append(String.valueOf(i)+","+Integer.toHexString(i).toUpperCase());
+   edt.append(String.valueOf(input[i])+","+Integer.toHexString(input[i]).toUpperCase());
    for(int j=0;j<dy.length;j++)
    {
     edt.append(","+dy[j].toLowerCase());

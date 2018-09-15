@@ -11,11 +11,23 @@ public final class Pinyin
  public static final int LOW_CASE = 1;      //全部小写
  
  private Pinyin(){}
-
+ 
  /**
   * 将输入字符串转为拼音，以字符为单位插入分隔符，多个拼音只取其中一个
   *
-  * 例: "hello:中国！"  在separator为","时，输出： "h,e,l,l,o,:,ZHONG,GUO,!"
+  * 例: "hello:中国！"  在separator为","时，输出： "H,E,L,L,O,:,Zhong,Guo,!"
+  *
+  * @param str        输入字符串
+  * @param separator  分隔符
+  * @return           中文转为拼音的字符串
+  */
+ public static String toPinyin(String str, String separator)
+ {
+  return toPinyin(str, separator, FIRST_UP_CASE);
+ }
+
+ /**
+  * 将输入字符串转为拼音，以字符为单位插入分隔符，多个拼音只取其中一个
   *
   * @param str        输入字符串
   * @param separator  分隔符
@@ -42,7 +54,18 @@ public final class Pinyin
  }
 
  /**
-  * 将输入字符转为拼音
+  * 将输入字符转为拼音，支持多音字
+  *
+  * @param c  输入字符
+  * @return   拼音字符串数组
+  */
+ public static String[] toPinyin(char c)
+ {
+  return toPinyin(c, FIRST_UP_CASE);
+ }
+
+ /**
+  * 将输入字符转为拼音，支持多音字
   *
   * @param c         输入字符
   * @param caseType  大小写类型
