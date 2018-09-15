@@ -35,7 +35,7 @@
   Pinyin.LOW_CASE;       //全部小写
  
  /**
-  * 将输入字符转为拼音，支持多音字
+  * 若输入字符是中文则转为拼音，若不是则返回该字符，支持多音字
   *
   * @param c  输入字符
   * @return   拼音字符串数组
@@ -43,7 +43,7 @@
  Pinyin.toPinyin(char c):String[]
  
  /**
-  * 将输入字符转为拼音，支持多音字
+  * 若输入字符是中文则转为拼音，若不是则返回该字符，支持多音字
   *
   * @param c         输入字符
   * @param caseType  大小写类型
@@ -52,12 +52,23 @@
  Pinyin.toPinyin(char c, int caseType):String[]
  
  /**
-  * 判断输入字符是否为汉字
+  * 若输入字符是中文则转为拼音，若不是则返回null，支持多音字
+  * 可用于判断该字符是否是中文汉字
   *
   * @param c  输入字符
-  * @return   是汉字返回非负数，反之返回负数
+  * @return   拼音字符串数组
   */
- Pinyin.isChinese(char c):int
+ Pinyin.getPinyin(char c):String[]
+ 
+ /**
+  * 若输入字符是中文则转为拼音，若不是则返回null，支持多音字
+  * 可用于判断该字符是否是中文汉字
+  *
+  * @param c         输入字符
+  * @param caseType  大小写类型
+  * @return          拼音字符串数组
+  */
+ Pinyin.getPinyin(char c, int caseType):String[]
  
  /**
   * 删除小写字母
