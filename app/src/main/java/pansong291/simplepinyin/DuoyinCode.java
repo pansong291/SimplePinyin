@@ -1,12 +1,104 @@
 package pansong291.simplepinyin;
 
-public final class DuoyinCode {
+/**
+ * Created by pansong291 on 2018/9/12.
+ */
+final class DuoyinCode
+{
 
- private DuoyinCode() {
-  //no instance
+ private DuoyinCode()
+ {}
+
+ static int getIndexOfDuoyinCharacter(char c)
+ {
+  int offset = c - PinyinData.MIN_VALUE;
+
+  if(offset < DuoyinCode.DUOYIN_CHARACTER[0]
+     || offset > DuoyinCode.DUOYIN_CHARACTER[DuoyinCode.DUOYIN_CHARACTER.length - 1])
+   return -1;
+
+  int indexStart = 0;
+  int indexEnd = DuoyinCode.DUOYIN_CHARACTER.length;
+  int indexMid = indexEnd / 2;
+  int temp;
+  /*
+   45,50,78
+   5, 6, 7, 8
+   s=5,m=6,e=8
+   o=77           o=46
+   t=77-50>0      t=46-50<0
+   s=6,m=7,e=8    s=5,m=5,e=6
+   t=77-78<0      t=46-45>0
+   s=6,m=6,e=7    s=5,m=5,e=6
+   t=77-50>0      t=46-45>0
+   s=6,m=6,e=7    s=5,m=5,e=6
+   t=77-50>0
+   s=6,m=6,e=7
+   */
+  for(;;)
+  {
+   temp = offset - DuoyinCode.DUOYIN_CHARACTER[indexMid];
+   if(temp < 0)
+   {
+    indexEnd = indexMid;
+   }else if(temp > 0)
+   {
+    if(indexStart == indexMid)
+    {
+     return -1;
+    }
+    indexStart = indexMid;
+   }else
+   {
+    break;
+   }
+   indexMid = (indexStart + indexEnd) / 2;
+  }
+  return indexMid;
  }
 
-public static short[] INDEX_DUOYIN_CHARACTER = new short[]{
+ static short[] decodeDuoyinIndex(int offset)
+ {
+  int ins,iny,len;
+  int ind = decodeIndexDuoyinCode(offset);
+  if(offset != DuoyinCode.INDEX_DUOYIN_CODE3.length - 1)
+   len = decodeIndexDuoyinCode(offset + 1) - ind;
+  else
+   len = DuoyinCode.DUOYIN_CODE.length - ind;
+  short realIndex[] = new short[len];
+
+  for(int j=0;j < len;j++)
+  {
+   ins = (ind + j) / 8;
+   iny = (ind + j) % 8;
+   //低8位
+   realIndex[j] = (short)(DuoyinCode.DUOYIN_CODE[ind + j] & 0xff);
+   //高1位，非0即1
+   if((DuoyinCode.DUOYIN_CODE_PADDING[ins] & PinyinData.BIT_MASKS[7 - iny]) != 0)
+    realIndex[j] = (short)(realIndex[j] | PinyinData.PADDING_MASK);
+  }
+  return realIndex;
+ }
+
+ private static short decodeIndexDuoyinCode(int offset)
+ {
+  int ins1 = offset / 8,ins2 = offset / 4;
+  int iny1 = offset % 8,iny2 = offset % 4;
+  //低8位
+  short realIndex = (short)(DuoyinCode.INDEX_DUOYIN_CODE3[offset] & 0xff);
+  //中2位，有00，01，10，11共4种情况
+  short m2Bit = (short)(DuoyinCode.index_duoyin_code2(ins2) & PinyinData.TWO_BIT_MASKS[iny2]);
+  m2Bit = (short)(m2Bit << 2 * iny2 + 2);
+  realIndex = (short)(realIndex | m2Bit);
+  //高1位，非0即1
+  if((DuoyinCode.index_duoyin_code1(ins1) & PinyinData.BIT_MASKS[7 - iny1]) != 0)
+  {
+   realIndex = (short)(realIndex | 0x400);
+  }
+  return realIndex;
+ }
+
+ static short[] DUOYIN_CHARACTER = new short[]{
   1,7,13,20,44,54,60,66,72,80,87,88,92,121,126,128,134,153,159,161,
   178,192,199,207,212,225,247,282,284,288,293,295,302,303,314,316,317,320,323,339,
   345,346,347,353,372,380,389,407,417,421,423,447,458,478,479,481,489,502,508,510,
@@ -70,9 +162,9 @@ public static short[] INDEX_DUOYIN_CHARACTER = new short[]{
   19476,19496,19523,19551,19566,19584,19616,19619,19632,19633,19679,19700,19720,19762,19780,19834,19885,19926,19987,19989,
   20108,20113,20141,20255,20320,20338,20387,20393,20404,20411,20417,20421,20442,20511,20548,20568,20615,20617,20623,20629,
   20662,20668,20669,20688,20709,20733,20734,20755,20797,20810,20813,20816,20838,20872,20892,20895};
- 
-  //1的index是115
- public static byte[] INDEX_DUOYIN_CODE1 = new byte[]{
+
+ //1的index是115
+ static byte[] INDEX_DUOYIN_CODE1 = new byte[]{
   0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
   0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
   0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -81,13 +173,13 @@ public static short[] INDEX_DUOYIN_CHARACTER = new short[]{
   0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,-1,-1,-1,-1,
   -1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
   -1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1};
-  
+
  static byte index_duoyin_code1(int i)
  {
-  if(i<115)
+  if(i < 115)
   {
    return 0;
-  }else if(i==115)
+  }else if(i == 115)
   {
    return 1;
   }else
@@ -95,9 +187,9 @@ public static short[] INDEX_DUOYIN_CHARACTER = new short[]{
    return -1;
   }
  }
-  
-  //5_55;86_114;-81_175;-4_231;85_291;
- public static byte[] INDEX_DUOYIN_CODE2 = new byte[]{
+
+ //5_55;86_114;-81_175;-4_231;85_291;
+ static byte[] INDEX_DUOYIN_CODE2 = new byte[]{
   0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
   0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
   0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5,85,85,85,85,
@@ -114,43 +206,43 @@ public static short[] INDEX_DUOYIN_CHARACTER = new short[]{
   0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
   0,0,0,0,0,0,0,0,0,0,0,85,85,85,85,85,85,85,85,85,
   85,85,85,85,85,85,85,85,85,85,85,85,85,85};
-  
-  static byte index_duoyin_code2(int i)
+
+ static byte index_duoyin_code2(int i)
+ {
+  if(i == 55)
   {
-   if(i==55)
-   {
-    return 5;
-   }else if(i==114)
-   {
-    return 86;
-   }else if(i==175)
-   {
-    return -81;
-   }else if(i==231)
-   {
-    return -4;
-   }else if(i<55)
-   {
-    return 0;
-   }else if(i<114)
-   {
-    return 85;
-   }else if(i<175)
-   {
-    return -86;
-   }else if(i<231)
-   {
-    return -1;
-   }else if(i<291)
-   {
-    return 0;
-   }else
-   {
-    return 85;
-   }
+   return 5;
+  }else if(i == 114)
+  {
+   return 86;
+  }else if(i == 175)
+  {
+   return -81;
+  }else if(i == 231)
+  {
+   return -4;
+  }else if(i < 55)
+  {
+   return 0;
+  }else if(i < 114)
+  {
+   return 85;
+  }else if(i < 175)
+  {
+   return -86;
+  }else if(i < 231)
+  {
+   return -1;
+  }else if(i < 291)
+  {
+   return 0;
+  }else
+  {
+   return 85;
   }
-  
- public static byte[] INDEX_DUOYIN_CODE3 = new byte[]{
+ }
+
+ static byte[] INDEX_DUOYIN_CODE3 = new byte[]{
   0,1,2,3,4,5,6,7,8,10,11,12,13,14,15,16,18,19,20,21,
   22,23,25,26,27,28,29,30,31,32,33,34,35,36,38,39,40,43,44,45,
   46,47,48,49,50,51,52,53,54,55,57,59,60,62,63,64,65,66,67,68,
@@ -214,8 +306,8 @@ public static short[] INDEX_DUOYIN_CHARACTER = new short[]{
   37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,53,54,55,56,57,
   58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,
   78,79,81,82,83,84,85,86,87,88,89,90,91,92,93,95};
-  
- public static short[] INDEX_DUOYIN_CODE = new short[]{
+
+ static short[] INDEX_DUOYIN_CODE = new short[]{
   0,1,2,3,4,5,6,7,8,10,11,12,13,14,15,16,18,19,20,21,
   22,23,25,26,27,28,29,30,31,32,33,34,35,36,38,39,40,43,44,45,
   46,47,48,49,50,51,52,53,54,55,57,59,60,62,63,64,65,66,67,68,
@@ -279,8 +371,8 @@ public static short[] INDEX_DUOYIN_CHARACTER = new short[]{
   1317,1318,1319,1320,1321,1322,1323,1324,1325,1326,1327,1328,1329,1330,1331,1333,1334,1335,1336,1337,
   1338,1339,1340,1341,1342,1343,1344,1345,1346,1347,1348,1349,1350,1351,1352,1353,1354,1355,1356,1357,
   1358,1359,1361,1362,1363,1364,1365,1366,1367,1368,1369,1370,1371,1372,1373,1375};
-  
- public static byte[] DUOYIN_CODE_PADDING = new byte[]{
+
+ static byte[] DUOYIN_CODE_PADDING = new byte[]{
   -128,120,71,-39,-63,26,69,106,-112,25,111,48,3,58,-128,-68,32,-57,22,-100,
   -108,20,100,-64,-95,58,43,17,-72,109,97,-128,68,-72,68,96,-103,1,22,26,
   -7,-50,-49,49,-54,-62,46,1,10,-57,-70,-77,-52,-16,33,-91,92,-103,17,-112,
@@ -290,8 +382,8 @@ public static short[] INDEX_DUOYIN_CHARACTER = new short[]{
   -121,63,24,7,-8,21,-64,65,-126,18,-11,127,114,64,-69,20,114,-9,125,99,
   112,53,100,8,66,-70,-110,-86,70,21,-23,66,27,-17,73,108,-14,-72,113,21,
   15,4,39,125,18,-121,19,-36,64,44,1,-126,-128};
-  
- public static byte[] DUOYIN_CODE = new byte[]{
+
+ static byte[] DUOYIN_CODE = new byte[]{
   -124,-53,89,-117,-21,65,58,2,-69,102,113,38,38,-36,-4,93,-114,3,-83,99,
   -6,84,1,39,35,3,90,116,104,-122,-101,-109,-117,60,36,-30,7,6,48,39,
   91,-1,-5,39,65,12,71,67,90,24,80,-126,-112,69,-122,102,-126,120,125,-14,

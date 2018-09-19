@@ -1,4 +1,4 @@
-package pansong291.pinyintest.ui;
+package pansong291.simplepinyin;
 
 import android.os.Bundle;
 import android.widget.EditText;

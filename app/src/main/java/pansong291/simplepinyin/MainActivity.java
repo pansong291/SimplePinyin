@@ -1,4 +1,4 @@
-package pansong291.pinyintest.ui;
+package pansong291.simplepinyin;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
@@ -23,7 +23,7 @@ public class MainActivity extends Zactivity
  String inPath="/storage/emulated/0/Download/unicode2Duoyin.txt";
  
  EditText edt;
- Button btn,btn2,btn3,btn4,btn5,btn6;
+ Button btn,btn2,btn3,btn4,btn5,btn6,btn7,btn8;
  
  BufferedReader br;
  
@@ -40,6 +40,8 @@ public class MainActivity extends Zactivity
   btn4=(Button)findViewById(R.id.btn4);
   btn5=(Button)findViewById(R.id.btn5);
   btn6=(Button)findViewById(R.id.btn6);
+  btn7=(Button)findViewById(R.id.btn7);
+  btn8=(Button)findViewById(R.id.btn8);
   
   requestPower();
  }
@@ -70,7 +72,7 @@ public class MainActivity extends Zactivity
     
     indexInPinyinTable.add((short)(Integer.parseInt(tps[1],16)-19968));
     indexInDuoyinTable.add(index_duoyin);
-    index_duoyin+=tps.length-3;
+    index_duoyin+=tps.length-3;//添加的值是每个字，多音的个数
     for(int i=3;i<tps.length;i++,count_pinyin++)
     {
      if(!tps[i].isEmpty())
@@ -80,8 +82,11 @@ public class MainActivity extends Zactivity
        //dei,eng,hng,lo,lue,n,qui,r,tei, not find
        if(tps[i].compareToIgnoreCase(PinyinData.PINYIN_TABLE[x])==0)
        {
+        //取低8位
         duoyinCode.add((byte)(x&0xff));
+        //取高1位，加入缓存
         highBitCache=(byte)(highBitCache|((x&0x100)>>>(count_pinyin%8+1)));
+        //若缓存满，加入list，缓存清0
         if((1+count_pinyin)%8==0)
         {
          duoyinCodePadding.add(highBitCache);
@@ -143,7 +148,7 @@ public class MainActivity extends Zactivity
     len=DuoyinCode.INDEX_DUOYIN_CODE[i+1]-ind;
    else len=DuoyinCode.DUOYIN_CODE.length-ind;
       
-   word=(char)(DuoyinCode.INDEX_DUOYIN_CHARACTER[i]+19968);
+   word=(char)(DuoyinCode.DUOYIN_CHARACTER[i]+19968);
    edt.append(String.valueOf(word)+","
     +Integer.toHexString(word).toUpperCase()+",");
    edt.append(Pinyin.toPinyin(word,Pinyin.LOW_CASE)+",");
@@ -152,7 +157,9 @@ public class MainActivity extends Zactivity
     //relInd=Pinyin.decodeIndex(DuoyinCode.DUOYIN_CODE_PADDING,DuoyinCode.DUOYIN_CODE,ind+j);
     
     int in1=(ind+j)/8,in2=(ind+j)%8;
+    //低8位
     relInd=(short)(DuoyinCode.DUOYIN_CODE[ind+j]&0xff);
+    //高1位
     if((DuoyinCode.DUOYIN_CODE_PADDING[in1]&PinyinData.BIT_MASKS[7-in2])!=0)
      relInd=(short)(relInd|0x100);
     
@@ -176,34 +183,43 @@ public class MainActivity extends Zactivity
   List<Byte>indexDuoyinCode1=new ArrayList<Byte>();
   List<Byte>indexDuoyinCode2=new ArrayList<Byte>();
   List<Byte>indexDuoyinCode3=new ArrayList<Byte>();
-  byte h1Bit=0,h2Bit=0;
+  byte h1BitCache=0,m2BitCache=0;
   short x;
   
   for(int i=0;i<DuoyinCode.INDEX_DUOYIN_CODE.length;i++)
   {
    x=DuoyinCode.INDEX_DUOYIN_CODE[i];
+   //取低8位
    indexDuoyinCode3.add((byte)(x&0xff));
-   h1Bit=(byte)(h1Bit|((x&0x400)>>>(i%8+3)));
+   //取高1位，加入缓存
+   h1BitCache=(byte)(h1BitCache|((x&0x400)>>>(i%8+3)));
+   //若缓存满，加入list，缓存清0
    if((1+i)%8==0)
    {
-    indexDuoyinCode1.add(h1Bit);
-    h1Bit=0;
+    indexDuoyinCode1.add(h1BitCache);
+    h1BitCache=0;
    }
-   h2Bit=(byte)(h2Bit|((x&0x300)>>>(i%4+1)*2));
+   //取中2位，加入缓存
+   m2BitCache=(byte)(m2BitCache|((x&0x300)>>>(i%4+1)*2));
+   
    if(i>=222&&i<=232)
    {
     edt.append("\nduoyin["+i+"]="+x+"\n&0x300="+(x&0x300)
-               +"\n>>>"+(i%4+1)*2+"="+((x&0x300)>>>(i%4+1)*2)+"\nh2Bit="+h2Bit);
+               +"\n>>>"+(i%4+1)*2+"="+((x&0x300)>>>(i%4+1)*2)+"\nh2Bit="+m2BitCache);
    }
+   //若缓存满，加入list，缓存清0
    if((1+i)%4==0)
    {
-    indexDuoyinCode2.add(h2Bit);
-    h2Bit=0;
+    indexDuoyinCode2.add(m2BitCache);
+    m2BitCache=0;
    }
   }
   //如果拼音总数不是8的倍数，说明还有最后的高1位的缓存
-  if(DuoyinCode.INDEX_DUOYIN_CODE.length%8!=0)indexDuoyinCode1.add(h1Bit);
-  if(DuoyinCode.INDEX_DUOYIN_CODE.length%4!=0)indexDuoyinCode2.add(h2Bit);
+  if(DuoyinCode.INDEX_DUOYIN_CODE.length%8!=0)
+  //如果拼音总数不是4的倍数，说明还有最后的中2位的缓存
+   indexDuoyinCode1.add(h1BitCache);
+  if(DuoyinCode.INDEX_DUOYIN_CODE.length%4!=0)
+   indexDuoyinCode2.add(m2BitCache);
   
 //  edt.append("\n\nindex1=");
 //  edt.append(getStringValueOfList(indexDuoyinCode1));
@@ -282,7 +298,111 @@ public class MainActivity extends Zactivity
   }
  }
  
- private String getStringValueOfList(List ls)
+ public void onClick7(View v)
+ {
+  //拼音TABLE转码
+  btn7.setClickable(false);
+  List<Byte>pyZiMu=new ArrayList<Byte>();
+  List<Byte>pyZiMu_Padding=new ArrayList<Byte>();
+  List<Integer>indexInPyZiMu=new ArrayList<Integer>();
+  int index_pyZiMu=0;
+  int ziMu;
+  int count_ziMu=0;
+  byte l4bitCache=0,h1bitCache=0;
+  
+  int pyLen;
+  for(int i=1;i<PinyinData.PINYIN_TABLE.length;i++)
+  {
+   pyLen=PinyinData.PINYIN_TABLE[i].length();
+   indexInPyZiMu.add(index_pyZiMu);
+   index_pyZiMu+=pyLen;
+   
+   for(int j=0;j<pyLen;j++,count_ziMu++)
+   {
+    //每个字母有5位
+    ziMu=PinyinData.PINYIN_TABLE[i].toLowerCase().charAt(j)-'^';
+    //取低4位，加入缓存
+    l4bitCache+=(byte)((ziMu&0xf)<<(4*((count_ziMu+1)%2)));
+    if(i<=3)
+    edt.append("l4bitCache="+Integer.toBinaryString(l4bitCache)+"\n");
+    //若缓存满，加入list，缓存清0
+    if((count_ziMu+1)%2==0)
+    {
+     pyZiMu.add(l4bitCache);
+     edt.append("append="+Integer.toBinaryString(l4bitCache)+"="+l4bitCache+pyZiMu.get(pyZiMu.size()-1)+"\n\n");
+     l4bitCache=0;
+    }
+    //取高1位，加入缓存
+    h1bitCache+=(byte)(((ziMu&0x10)<<4)>>>(count_ziMu%8+1));
+    //若缓存满，加入list，缓存清0
+    if((count_ziMu+1)%8==0)
+    {
+     pyZiMu_Padding.add(h1bitCache);
+     h1bitCache=0;
+    }
+   }
+  }
+  //如果字母总数不是2的倍数，说明还有最后的低4位的缓存
+  if(count_ziMu%2!=0)
+   pyZiMu.add(l4bitCache);
+  //如果拼音总数不是8的倍数，说明还有最后的高1位的缓存
+  if(count_ziMu%8!=0)
+   pyZiMu_Padding.add(h1bitCache);
+  
+  edt.append("\n\npyZiMu=");
+  edt.append(getStringValueOfList(pyZiMu));
+  edt.append("\n\npyZiMuPadding=");
+  edt.append(getStringValueOfList(pyZiMu_Padding));
+  edt.append("\n\nindexInPyZiMu=");
+  edt.append(getStringValueOfList(indexInPyZiMu));
+ }
+
+ public void onClick8(View v)
+ {
+  //PinyinData.codeIndex(edt);
+//  for(int i=0;i<417;i++)
+//  edt.append(PinyinData.getPinyin(i)+",");
+//  if(true)return;
+  //拼音TABLE解码
+  btn8.setClickable(false);
+  int FOUR_BIT_MASKS[]={0xf0,0xf};
+  int zmInd;
+  int pyLen;
+  int ziMu;
+  byte l4Bit;
+  StringBuilder strb=new StringBuilder();
+  for(int ind=1;ind<PinyinData.PINYIN_TABLE.length;ind++)
+  {
+   zmInd=PinyinData.INDEX_PY_ZIMU[ind-1];
+   if(ind==PinyinData.PINYIN_TABLE.length-1)
+    //这里，py字母的个数不一定是偶数，代码有误
+    pyLen=PinyinData.PY_ZIMU_CODE.length*2-zmInd;
+   else pyLen=PinyinData.INDEX_PY_ZIMU[ind]-zmInd;
+   
+   for(int i=0;i < pyLen;i++)
+   {
+    int ins1=(zmInd+i) / 8,ins4=(zmInd+i) / 2;
+    int iny1=(zmInd+i) % 8,iny4=(zmInd+i) % 2;
+    //低4位
+    //l4Bit = (byte);
+    //if(ind<=10)
+     //edt.append("\nl4="+Integer.toBinaryString(l4Bit));
+    l4Bit = (byte)((PinyinData.PY_ZIMU_CODE[ins4] & FOUR_BIT_MASKS[iny4]) >>> 4 - 4 * iny4);
+    ziMu = l4Bit;
+    //高1位
+    if((PinyinData.PY_ZIMU_CODE_PADDING[ins1] & PinyinData.BIT_MASKS[7 - iny1]) != 0)
+     ziMu = (short)(ziMu | 0x10);
+    
+    ziMu += '^';
+    if(i==0)ziMu-='a'-'A';
+    strb.append((char)ziMu);
+   }
+   strb.append(',');
+  }
+  edt.append(strb.toString());
+ }
+ 
+ static String getStringValueOfList(List ls)
  {
   StringBuilder strb=new StringBuilder();
   strb.append("{\n");

@@ -1,4 +1,4 @@
-package pansong291.pinyintest.ui;
+package pansong291.simplepinyin;
 
 import android.app.Activity;
 import android.os.Bundle;

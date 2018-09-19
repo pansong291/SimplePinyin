@@ -5,7 +5,7 @@ android {
     buildToolsVersion "21.1.0"
 
     defaultConfig {
-        applicationId "pansong291.pinyintest"
+        applicationId "pansong291.simplepinyin"
         minSdkVersion 14
         targetSdkVersion 21
         versionCode 1

@@ -131,11 +131,11 @@ public final class Pinyin
    String duoyin[] = getDuoyin(c);
    if(duoyin == null)
    {
-    result = new String[]{PinyinData.PINYIN_TABLE[charIndex]};
+    result = new String[]{PinyinData.getPinyin(charIndex)};
    }else
    {
     result = new String[duoyin.length + 1];
-    result[0] = PinyinData.PINYIN_TABLE[charIndex];
+    result[0] = PinyinData.getPinyin(charIndex);
     for(int i = 0;i < duoyin.length;i++)
     {
      result[i + 1] = duoyin[i];
@@ -200,57 +200,21 @@ public final class Pinyin
   }
  }
 
- private static String[] getDuoyin(char c)
+ static String[] getDuoyin(char c)
  {
   String duoyin[] = null;
   short duoyinCode[] = null;
-  int i = getIndexOfDuoyinCharacter(c);
+  int i = DuoyinCode.getIndexOfDuoyinCharacter(c);
   if(i >= 0)
   {
-   duoyinCode = decodeDuoyinIndex(i);
+   duoyinCode = DuoyinCode.decodeDuoyinIndex(i);
    duoyin = new String[duoyinCode.length];
    for(int j = 0;j < duoyinCode.length;j++)
    {
-    duoyin[j] = PinyinData.PINYIN_TABLE[duoyinCode[j]];
+    duoyin[j] = PinyinData.getPinyin(duoyinCode[j]);
    }
   }
   return duoyin;
- }
-
- private static int getIndexOfDuoyinCharacter(char c)
- {
-  int offset = c - PinyinData.MIN_VALUE;
-  
-  if(offset < DuoyinCode.INDEX_DUOYIN_CHARACTER[0]
-     || offset > DuoyinCode.INDEX_DUOYIN_CHARACTER[DuoyinCode.INDEX_DUOYIN_CHARACTER.length - 1])
-   return -1;
-  
-  int indexStart = 0;
-  int indexEnd = DuoyinCode.INDEX_DUOYIN_CHARACTER.length;
-  int indexMid = indexEnd / 2;
-  int temp;
-
-  for(;;)
-  {
-   temp = offset - DuoyinCode.INDEX_DUOYIN_CHARACTER[indexMid];
-   if(temp < 0)
-   {
-    indexEnd = indexMid;
-    indexMid = (indexStart + indexEnd) / 2;
-   }else if(temp > 0)
-   {
-    if(indexStart == indexMid)
-    {
-     return -1;
-    }
-    indexStart = indexMid;
-    indexMid = (indexStart + indexEnd) / 2;
-   }else
-   {
-    break;
-   }
-  }
-  return indexMid;
  }
  
  private static short decodeIndex(byte[] paddings, byte[] indexes, int offset)
@@ -264,47 +228,6 @@ public final class Pinyin
   {
    realIndex = (short) (realIndex | PinyinData.PADDING_MASK);
   }  
-  return realIndex;
- }
-
- private static short[] decodeDuoyinIndex(int offset)
- {
-  int ins,iny,len;
-  int ind = decodeIndex2(offset);
-  if(offset != DuoyinCode.INDEX_DUOYIN_CODE3.length - 1)
-   len = decodeIndex2(offset + 1) - ind;
-  else
-   len = DuoyinCode.DUOYIN_CODE.length - ind;
-  short realIndex[] = new short[len];
-
-  for(int j=0;j < len;j++)
-  {
-   ins = (ind + j) / 8;
-   iny = (ind + j) % 8;
-   //低8位
-   realIndex[j] = (short)(DuoyinCode.DUOYIN_CODE[ind + j] & 0xff);
-   //高1位，非0即1
-   if((DuoyinCode.DUOYIN_CODE_PADDING[ins] & PinyinData.BIT_MASKS[7 - iny]) != 0)
-    realIndex[j] = (short)(realIndex[j] | PinyinData.PADDING_MASK);
-  }
-  return realIndex;
- }
-
- private static short decodeIndex2(int offset)
- {
-  int ins1 = offset / 8,ins2 = offset / 4;
-  int iny1 = offset % 8,iny2 = offset % 4;
-  //低8位
-  short realIndex = (short)(DuoyinCode.INDEX_DUOYIN_CODE3[offset] & 0xff);
-  //中2位，有00，01，10，11共4种情况
-  short m2Bit = (short)(DuoyinCode.index_duoyin_code2(ins2) & PinyinData.TWO_BIT_MASKS[iny2]);
-  m2Bit = (short)(m2Bit << 2 * iny2 + 2);
-  realIndex = (short)(realIndex | m2Bit);
-  //高1位，非0即1
-  if((DuoyinCode.index_duoyin_code1(ins1) & PinyinData.BIT_MASKS[7 - iny1]) != 0)
-  {
-   realIndex = (short)(realIndex | 0x400);
-  }
   return realIndex;
  }
 

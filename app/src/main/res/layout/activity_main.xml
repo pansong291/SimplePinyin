@@ -89,6 +89,27 @@
 
 		</LinearLayout>
 
+        <LinearLayout
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:text="btn7"
+                android:onClick="onClick7"
+                android:id="@+id/btn7"/>
+
+            <Button
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:text="btn8"
+                android:id="@+id/btn8"
+                android:onClick="onClick8"/>
+
+        </LinearLayout>
+        
 	</LinearLayout>
 
 </LinearLayout>

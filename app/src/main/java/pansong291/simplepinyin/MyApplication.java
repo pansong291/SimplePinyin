@@ -1,6 +1,5 @@
-package pansong291.pinyintest;
+package pansong291.simplepinyin;
 
-import pansong291.pinyintest.ui.CrashActivity;
 import pansong291.crash.CrashApplication;
 
 public class MyApplication extends CrashApplication
