@@ -131,11 +131,11 @@ public final class Pinyin
    String duoyin[] = getDuoyin(c);
    if(duoyin == null)
    {
-    result = new String[]{PinyinData.getPinyin(charIndex)};
+    result = new String[]{PinyinData.PINYIN_TABLE[charIndex]};
    }else
    {
     result = new String[duoyin.length + 1];
-    result[0] = PinyinData.getPinyin(charIndex);
+    result[0] = PinyinData.PINYIN_TABLE[charIndex];
     for(int i = 0;i < duoyin.length;i++)
     {
      result[i + 1] = duoyin[i];
@@ -211,7 +211,7 @@ public final class Pinyin
    duoyin = new String[duoyinCode.length];
    for(int j = 0;j < duoyinCode.length;j++)
    {
-    duoyin[j] = PinyinData.getPinyin(duoyinCode[j]);
+    duoyin[j] = PinyinData.PINYIN_TABLE[duoyinCode[j]];
    }
   }
   return duoyin;
