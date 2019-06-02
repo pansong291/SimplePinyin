@@ -1,5 +1,7 @@
 # SimplePinyin
-[![Travis](https://img.shields.io/badge/license-Apache%20License%202.0-blue.svg)](LICENSE)  
+[![License](https://img.shields.io/github/license/pansong291/SimplePinyin.svg)](LICENSE)
+[![Latest Release](https://img.shields.io/github/release/pansong291/SimplePinyin.svg)](../../releases)
+[![All Releases Download](https://img.shields.io/github/downloads/pansong291/SimplePinyin/total.svg)](../../releases)
 
 简单的、低内存占用的中文汉字转拼音库，支持多音字，基于[TinyPinyin](https://github.com/promeG/TinyPinyin)。  
 
