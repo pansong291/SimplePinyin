@@ -1,5 +1,6 @@
 # SimplePinyin
 [![License](https://img.shields.io/github/license/pansong291/SimplePinyin.svg)](LICENSE)
+[![Closed Issues](https://img.shields.io/github/issues-closed/pansong291/SimplePinyin.svg)](../../issues)
 [![Latest Release](https://img.shields.io/github/release/pansong291/SimplePinyin.svg)](../../releases)
 [![All Releases Download](https://img.shields.io/github/downloads/pansong291/SimplePinyin/total.svg)](../../releases)
 
